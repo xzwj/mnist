@@ -32,8 +32,8 @@ class Net(nn.Module):
         # x = self.fc2(x)
 
         x = x.view(x.size(0), -1)
-        # x = F.relu(self.input_layer(x))
-        x = F.tanh(self.input_layer(x))
+        x = F.relu(self.input_layer(x))
+        # x = F.tanh(self.input_layer(x))
         x = self.hidden_layer(x)
         # return x
 
@@ -162,11 +162,11 @@ def main():
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
     criterion = nn.CrossEntropyLoss(reduction='sum')
 
-    with codecs.open(str(args.num_experiment) + '_' + str(args.hidden_layer_dim) + '_tanh.log', 'w', 'utf-8') as wf_log:
+    with codecs.open(str(args.num_experiment) + '_' + str(args.hidden_layer_dim) + '_adjust.log', 'w', 'utf-8') as wf_log:
         for epoch in range(1, args.epochs + 1):
             train_loss, train_acc = train(args, model, device, train_loader, optimizer, epoch, criterion)
             test_loss, test_acc = test(args, model, device, test_loader, criterion)
-            adjust_learning_rate(optimizer, epoch-1, args)
+            # adjust_learning_rate(optimizer, epoch-1, args)
             print(epoch, '==>', train_loss, train_acc, test_loss, test_acc)
             wf_log.write(','.join([str(train_loss), str(train_acc), str(test_loss), str(test_acc)]) + '\n')
 
